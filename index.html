@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Proposition pour constituer une base de leads de viticulteurs champenois enrichie et une méthode réutilisable.">
+  <title>Proposition - Leads Viticulteurs Champagne</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2315120d'/%3E%3Ccircle cx='32' cy='32' r='18' fill='%23c8a557'/%3E%3Cpath d='M24 21h16v8c0 6-4 10-8 10s-8-4-8-10z' fill='%23fffdf8'/%3E%3Cpath d='M32 39v9M25 48h14' stroke='%23fffdf8' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <style>
+    :root {
+      --ink: #15120d;
+      --muted: #665f52;
+      --paper: #fbf7ee;
+      --cream: #fffdf8;
+      --gold: #c8a557;
+      --gold-soft: #eadbb7;
+      --vine: #2f4b34;
+      --wine: #6f2432;
+      --line: rgba(21, 18, 13, .16);
+      --shadow: 0 24px 70px rgba(21, 18, 13, .14);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(200, 165, 87, .18), transparent 30%),
+        radial-gradient(circle at 88% 42%, rgba(111, 36, 50, .12), transparent 34%),
+        linear-gradient(180deg, #fffdf8 0%, #f7efe0 48%, #fbf7ee 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(251, 247, 238, .82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: conic-gradient(from 180deg, var(--gold), #fff1bd, var(--wine), var(--vine), var(--gold));
+      box-shadow: inset 0 0 0 2px rgba(21, 18, 13, .72);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav-links a,
+    .button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid rgba(21, 18, 13, .18);
+      border-radius: 999px;
+      background: rgba(255, 253, 248, .72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 780;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .nav-links a:hover,
+    .button:hover {
+      transform: translateY(-2px);
+      background: #fff;
+      border-color: rgba(21, 18, 13, .34);
+    }
+
+    .button.primary {
+      color: #fff;
+      border-color: transparent;
+      background: var(--ink);
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: auto;
+    }
+
+    .section {
+      padding: 82px 0;
+      position: relative;
+    }
+
+    .hero {
+      padding: 56px 0 82px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(360px, .96fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid rgba(21, 18, 13, .14);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, .86);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-copy {
+      padding: clamp(28px, 5vw, 58px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border: 1px solid rgba(21, 18, 13, .14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .74);
+      color: var(--wine);
+      font-size: 12px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 5px rgba(200, 165, 87, .18);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 24px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(44px, 6vw, 86px);
+      line-height: .95;
+      letter-spacing: -.045em;
+    }
+
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 4.3vw, 64px);
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 1.18;
+      letter-spacing: -.015em;
+    }
+
+    .lead {
+      margin-top: 24px;
+      max-width: 780px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.62;
+      font-weight: 520;
+    }
+
+    .copy {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.78;
+      font-weight: 500;
+    }
+
+    .copy strong {
+      color: var(--ink);
+      font-weight: 780;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .hero-media {
+      position: relative;
+      min-height: 620px;
+    }
+
+    .hero-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 25%, rgba(21, 18, 13, .62));
+    }
+
+    .media-caption {
+      position: absolute;
+      z-index: 1;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      display: grid;
+      gap: 8px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: 18px;
+      color: #fff;
+      background: rgba(21, 18, 13, .42);
+      backdrop-filter: blur(12px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 38px;
+    }
+
+    .stat {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .66);
+    }
+
+    .stat b {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: .86fr 1fr;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .section-number {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 24px;
+      border: 1px solid rgba(21, 18, 13, .14);
+      border-radius: 22px;
+      background: rgba(255, 253, 248, .82);
+      box-shadow: 0 10px 30px rgba(21, 18, 13, .06);
+    }
+
+    .card.dark {
+      color: #fff;
+      background: linear-gradient(145deg, #17130e, #2e2619);
+    }
+
+    .card.green {
+      color: #fff;
+      background: linear-gradient(145deg, #263d2b, #101d13);
+    }
+
+    .card.wine {
+      color: #fff;
+      background: linear-gradient(145deg, #6f2432, #2a1015);
+    }
+
+    .card.dark .copy,
+    .card.green .copy,
+    .card.wine .copy {
+      color: rgba(255, 255, 255, .76);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid rgba(21, 18, 13, .16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .68);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .dark .pill,
+    .green .pill,
+    .wine .pill {
+      color: #fff;
+      border-color: rgba(255, 255, 255, .18);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .photo-strip {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      min-height: 430px;
+    }
+
+    .photo {
+      overflow: hidden;
+      border-radius: 24px;
+      min-height: 300px;
+      box-shadow: var(--shadow);
+    }
+
+    .photo.tall {
+      min-height: 430px;
+    }
+
+    .table {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 253, 248, .86);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row b,
+    .row span {
+      padding: 18px 20px;
+    }
+
+    .row b {
+      background: rgba(200, 165, 87, .13);
+    }
+
+    .row span {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 253, 248, .8);
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .price {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .price-tag {
+      display: grid;
+      place-items: center;
+      min-height: 330px;
+      padding: 34px;
+      border-radius: 26px;
+      color: #fff;
+      background:
+        linear-gradient(145deg, rgba(21, 18, 13, .92), rgba(111, 36, 50, .92)),
+        url("https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1600&q=80") center / cover;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .price-tag b {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(72px, 10vw, 132px);
+      line-height: .86;
+      letter-spacing: -.06em;
+    }
+
+    .quote {
+      padding: 30px;
+      border-left: 5px solid var(--gold);
+      border-radius: 0 22px 22px 0;
+      background: rgba(255, 255, 255, .7);
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.18;
+      letter-spacing: -.02em;
+    }
+
+    .warning {
+      border: 1px solid rgba(111, 36, 50, .22);
+      background: rgba(111, 36, 50, .07);
+    }
+
+    .footer {
+      padding: 36px 0 54px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .nav-inner,
+      .hero-grid,
+      .section-head,
+      .grid-2,
+      .grid-3,
+      .photo-strip,
+      .timeline,
+      .price {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-media {
+        min-height: 430px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .section {
+        padding: 58px 0;
+      }
+
+      .hero {
+        padding-top: 32px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="brand-mark"></span> Proposition leads Champagne</div>
+        <div class="nav-links">
+          <a href="#livrable">Livrable</a>
+          <a href="#methode">Méthode</a>
+          <a href="#formation">Formation</a>
+          <a href="#prix">Devis</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="wrap hero-grid">
+        <div class="panel hero-copy reveal">
+          <span class="eyebrow"><span class="dot"></span> Suite à notre échange</span>
+          <h1>Base de leads pour viticulteurs champenois.</h1>
+          <p class="lead">
+            Adrien, l'idée est simple : construire une liste propre de viticulteurs liés au champagne,
+            l'enrichir avec les informations utiles, puis préparer un fichier facile à importer dans Pipedrive.
+            Je te laisse aussi une méthode claire pour reproduire le travail sur un autre secteur ou une autre zone.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#prix">Voir le devis</a>
+            <a class="button" href="#formation">Voir la méthode</a>
+          </div>
+          <div class="stats">
+            <div class="stat"><b>Pipedrive</b><span>fichier pensé pour être importé dans le CRM</span></div>
+            <div class="stat"><b>Email</b><span>donnée prioritaire à retrouver quand elle est publique</span></div>
+            <div class="stat"><b>1</b><span>base exploitable + une méthode réutilisable</span></div>
+          </div>
+        </div>
+        <div class="panel hero-media reveal">
+          <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1600&q=80" alt="Cave avec bouteilles de champagne et de vin">
+          <div class="media-caption">
+            <strong>Objectif</strong>
+            <span>Un fichier clair, vérifiable, utile pour lancer une prospection ciblée sans perdre du temps dans des recherches dispersées.</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section" id="contexte">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-number">Contexte</div>
+              <h2>Pourquoi cette base a du sens.</h2>
+            </div>
+            <p class="copy">
+              Le marché du champagne est assez spécifique : beaucoup de maisons, de domaines, de vignerons indépendants,
+              de coopératives et d'acteurs locaux. Le problème, ce n'est pas de trouver quelques noms. Le vrai sujet,
+              c'est d'avoir une base structurée, triée, enrichie et utilisable.
+            </p>
+          </div>
+          <div class="grid-3">
+            <div class="card reveal">
+              <h3>Ciblage net</h3>
+              <p class="copy">On ne part pas sur “tous les cavistes” ou “tous les vins”. Le coeur de la base : viticulteurs et acteurs champagne.</p>
+            </div>
+            <div class="card reveal">
+              <h3>Temps gagné</h3>
+              <p class="copy">Au lieu de chercher fiche par fiche, on prépare une base exploitable directement dans un tableur.</p>
+            </div>
+            <div class="card reveal">
+              <h3>Méthode réutilisable</h3>
+              <p class="copy">Le but est aussi que tu comprennes comment refaire la même logique sur un autre segment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="objectif">
+        <div class="wrap grid-2">
+          <div class="photo tall reveal">
+            <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=1400&q=80" alt="Rangées de vignes au soleil">
+          </div>
+          <div class="card green reveal">
+            <div class="section-number">Objectif</div>
+            <h2>Construire une liste enrichie, pas juste une extraction brute.</h2>
+            <p class="copy" style="margin-top: 22px;">
+              Une extraction brute, c'est souvent sale : doublons, noms incomplets, mauvais secteur, emails absents alors
+              que c'est la donnée la plus importante, numéros non vérifiés, sources mélangées. Ici, le livrable doit être plus propre.
+            </p>
+            <div class="pill-row">
+              <span class="pill">Nom du domaine</span>
+              <span class="pill">Nom / prénom si disponible</span>
+              <span class="pill">Téléphone</span>
+              <span class="pill">Email professionnel en priorité</span>
+              <span class="pill">Site web</span>
+              <span class="pill">Commune</span>
+              <span class="pill">Source</span>
+              <span class="pill">Statut / typologie</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="livrable">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-number">Livrable</div>
+              <h2>Ce que tu récupères à la fin.</h2>
+            </div>
+            <p class="copy">
+              Je te livre une base simple à utiliser, avec une structure pensée pour Pipedrive.
+              Pas un fichier décoratif, pas un export illisible. L'idée est que tu puisses importer, filtrer,
+              trier, relancer, segmenter et comprendre d'où viennent les infos.
+            </p>
+          </div>
+          <div class="table reveal">
+            <div class="row"><b>Format</b><span>Google Sheet et/ou CSV propre, préparé pour un import Pipedrive avec des colonnes simples à mapper.</span></div>
+            <div class="row"><b>Données</b><span>Domaine, email professionnel en priorité, téléphone, nom si disponible, site, commune, catégorie, source et commentaire de qualification.</span></div>
+            <div class="row"><b>Pipedrive</b><span>Je prépare les champs pour que l'import soit logique : organisation, personne, email, téléphone, ville, source, statut et note de qualification.</span></div>
+            <div class="row"><b>Nettoyage</b><span>Suppression des doublons, harmonisation des noms, vérification rapide des champs importants.</span></div>
+            <div class="row"><b>Documentation</b><span>Une note courte qui explique comment la base a été construite et comment reproduire la méthode.</span></div>
+            <div class="row"><b>Limite claire</b><span>L'email est l'information la plus importante, donc on le cherche en premier. S'il n'existe pas publiquement, il est marqué comme “non trouvé”, et on enrichit quand même avec téléphone, site, formulaire ou autre contact utile.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <div class="wrap">
+          <div class="photo-strip reveal">
+            <div class="photo tall">
+              <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1500&q=80" alt="Bouteilles de vin et champagne en cave">
+            </div>
+            <div class="grid-2" style="grid-template-columns: 1fr;">
+              <div class="card">
+                <div class="section-number">Sources</div>
+                <h2>On part de sources publiques et vérifiables.</h2>
+              </div>
+              <div class="card warning">
+                <h3>Point important</h3>
+                <p class="copy">
+                  Google Maps peut aider à repérer des acteurs, mais je ne présente pas la mission comme un “bulk scraping Google Maps”.
+                  Les conditions Google interdisent l'extraction de contenu Maps pour l'utiliser hors de leurs services. Je privilégie donc
+                  les annuaires professionnels, sites officiels, sites des domaines, pages publiques et sources autorisées.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="methode">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-number">Méthode</div>
+              <h2>La méthode de collecte.</h2>
+            </div>
+            <p class="copy">
+              L'approche est volontairement simple : on commence large, on filtre, on enrichit, on vérifie.
+              Ce qui compte, c'est d'obtenir une base utile, pas de faire une démonstration technique compliquée.
+            </p>
+          </div>
+          <div class="steps reveal">
+            <div class="step"><div><h3>Définir le périmètre</h3><p class="copy">Champagne uniquement : vignerons, domaines, récoltants, producteurs, coopératives ou acteurs clairement liés au secteur.</p></div></div>
+            <div class="step"><div><h3>Identifier les sources</h3><p class="copy">Annuaires métiers, sites institutionnels, sites des domaines, moteurs de recherche, pages publiques et sources avec conditions compatibles.</p></div></div>
+            <div class="step"><div><h3>Extraire les premiers champs</h3><p class="copy">Nom du domaine, site web, commune, catégorie, lien source. À ce stade, la base est encore incomplète.</p></div></div>
+            <div class="step"><div><h3>Enrichir contact par contact</h3><p class="copy">Recherche de l'email professionnel en priorité, puis du téléphone, du nom/prénom si disponible, et d'un élément de contexte utile.</p></div></div>
+            <div class="step"><div><h3>Nettoyer</h3><p class="copy">Doublons, accents, villes, formats de téléphone, emails génériques identifiés, lignes hors sujet.</p></div></div>
+            <div class="step"><div><h3>Qualifier</h3><p class="copy">On ajoute des tags simples : vigneron indépendant, maison, coopérative, domaine familial, contact prioritaire, information à vérifier.</p></div></div>
+            <div class="step"><div><h3>Livrer et expliquer</h3><p class="copy">Tu récupères le fichier final prêt pour Pipedrive et la méthode pour refaire le même travail ailleurs.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="formation">
+        <div class="wrap grid-2">
+          <div class="card dark reveal">
+            <div class="section-number">Mini formation</div>
+            <h2>Comment reproduire le scraping sur un autre secteur.</h2>
+            <p class="copy" style="margin-top: 22px;">
+              Je te laisse une méthode compréhensible, pas un outil magique incompréhensible. L'idée est que tu puisses refaire
+              la logique sur “viticulteurs Bourgogne”, “cavistes premium”, “restaurants étoilés”, “agences immobilières”, etc.
+            </p>
+          </div>
+          <div class="card reveal">
+            <h3>La recette à retenir</h3>
+            <p class="copy" style="margin-top: 12px;">
+              1. Définir un secteur précis.<br>
+              2. Lister les sources publiques fiables.<br>
+              3. Extraire une première base simple.<br>
+              4. Enrichir avec site, téléphone, email, nom.<br>
+              5. Nettoyer les doublons.<br>
+              6. Ajouter une colonne “source”.<br>
+              7. Préparer l'import dans Pipedrive avec les bons champs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="enrichissement">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-number">Enrichissement</div>
+              <h2>Ce qu'on ajoute pour rendre la base vraiment utile.</h2>
+            </div>
+            <p class="copy">
+              La valeur n'est pas seulement dans la quantité. Elle est dans les informations qui permettent de contacter
+              la bonne personne avec un message cohérent.
+            </p>
+          </div>
+          <div class="grid-3">
+            <div class="card reveal"><h3>Contact</h3><p class="copy">Email professionnel en priorité, puis téléphone, formulaire de contact ou autre point d'entrée si aucun email public n'est trouvé.</p></div>
+            <div class="card reveal"><h3>Contexte</h3><p class="copy">Commune, site web, typologie, éventuelle spécialité ou élément utile pour personnaliser.</p></div>
+            <div class="card reveal"><h3>Fiabilité</h3><p class="copy">Source de chaque ligne, champ “à vérifier” quand l'information n'est pas assez solide.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="cadre">
+        <div class="wrap">
+          <div class="card warning reveal">
+            <div class="section-number">Cadre propre</div>
+            <h2>On reste propre sur la donnée.</h2>
+            <p class="copy" style="margin-top: 22px;">
+              Comme il y a potentiellement des données personnelles, on garde un cadre simple :
+              source publique, intérêt professionnel cohérent, possibilité d'opposition, pas de données sensibles,
+              pas de contournement technique, pas de promesse de volume artificiel.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="planning">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-number">Déroulé</div>
+              <h2>Le déroulé.</h2>
+            </div>
+            <p class="copy">
+              Je propose de rester efficace : un cadrage rapide, une première extraction, un enrichissement,
+              puis une livraison avec explication de la méthode.
+            </p>
+          </div>
+          <div class="timeline">
+            <div class="card reveal"><h3>1. Cadrage</h3><p class="copy">Validation du périmètre champagne et des colonnes attendues.</p></div>
+            <div class="card reveal"><h3>2. Collecte</h3><p class="copy">Construction de la base initiale depuis les sources retenues.</p></div>
+            <div class="card reveal"><h3>3. Enrichissement</h3><p class="copy">Ajout des contacts, nettoyage et qualification.</p></div>
+            <div class="card reveal"><h3>4. Livraison</h3><p class="copy">Fichier final prêt pour Pipedrive + note pour reproduire la méthode.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="prix">
+        <div class="wrap price">
+          <div class="price-tag reveal">
+            <div>
+              <span class="eyebrow" style="color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);">Devis final</span>
+              <b>950 €</b>
+              <span style="display:block;margin-top:14px;color:rgba(255,255,255,.72);font-weight:700;">400 € collecte + 550 € formation</span>
+            </div>
+          </div>
+          <div class="card reveal">
+            <div class="section-number">Devis final</div>
+            <h2>Le devis pour la mission complète.</h2>
+            <p class="copy" style="margin-top: 22px;">
+              Le devis couvre deux choses : d'abord le scraping et l'enrichissement de tous les leads de viticulteurs champagne
+              trouvables dans le périmètre validé, puis la formation pour que tu comprennes comment reproduire la méthode sur
+              un autre secteur.
+            </p>
+            <div class="table" style="margin-top: 22px;">
+              <div class="row"><b>400 €</b><span>Scraping des leads viticulteurs champagne, nettoyage de la base, recherche de l'email en priorité, enrichissement avec téléphone, site, commune, source et contact utile quand disponible, puis préparation pour import Pipedrive.</span></div>
+              <div class="row"><b>550 €</b><span>Formation pour reproduire la méthode : choisir les sources, extraire proprement, enrichir, nettoyer, qualifier, préparer l'import Pipedrive et refaire la même logique sur un autre secteur.</span></div>
+              <div class="row"><b>Total 950 €</b><span>Base exploitable + méthode réutilisable. L'objectif est que tu récupères un fichier utile pour Pipedrive, mais aussi que tu comprennes comment refaire le process.</span></div>
+            </div>
+            <div class="pill-row">
+              <span class="pill">Emails en priorité</span>
+              <span class="pill">Import Pipedrive</span>
+              <span class="pill">Base qualifiée</span>
+              <span class="pill">Sources visibles</span>
+              <span class="pill">Formation incluse</span>
+              <span class="pill">Méthode réutilisable</span>
+            </div>
+            <p class="copy" style="margin-top: 20px;">
+              Je préfère être clair : l'email est la donnée la plus importante et on la cherche en premier. Mais je ne promets
+              pas que chaque viticulteur aura un email direct public. Quand l'information est fiable, on l'ajoute. Quand elle
+              ne l'est pas, on le marque proprement et on enrichit avec le meilleur point de contact disponible.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        Proposition courte et claire pour Adrien Milard · Base de leads viticulteurs Champagne · Devis détaillé en fin de page
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("show");
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
+  </script>
+</body>
+</html>
